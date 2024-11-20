@@ -125,6 +125,62 @@ const allDoctors = async (req, res) => {
     }
 }
 
+//API for doctor details
+const docDetails = async (req, res) => {
+    try {
+        const doctorId = req.params.id;
+
+        const appointments = await appointmentModel.find({
+            docId: doctorId,
+            cancelled: false, // Exclude cancelled appointments
+        }).sort({ slotDate: 1, slotTime: 1 }); // Sort by date and time
+
+        if (!appointments.length) {
+            return res.status(404).json({ message: 'No booked appointments found' });
+        }
+
+        const formattedAppointments = appointments.map(appointment => ({
+            date: appointment.slotDate,
+            time: appointment.slotTime,
+            patientName: appointment.userData.name,
+            isCompleted: appointment.isCompleted,
+        }));
+
+        res.status(200).json(formattedAppointments);
+
+        // const doctor = await doctorModel.findById(req.params.id)
+        // const slotDetails = await appointmentModel.find({docId: req.params.id})
+        // console.log(doctor.slots_booked)
+        // console.log(slotDetails)
+        // return res.json({ success: true, doctor,slotDetails })
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// Add or update a note for an appointment
+const addAppointmentNote = async (req, res) => {
+    const { appointmentId } = req.params;
+    const { note } = req.body;
+
+    try {
+        const appointment = await appointmentModel.findById(appointmentId);
+
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+
+        appointment.note = note;
+        await appointment.save();
+
+        res.status(200).json({ message: 'Note added/updated successfully', appointment });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating note', error });
+    }
+};
+
+
 // API to get dashboard data for admin panel
 const adminDashboard = async (req, res) => {
     try {
@@ -154,5 +210,7 @@ export {
     appointmentCancel,
     addDoctor,
     allDoctors,
-    adminDashboard
+    adminDashboard,
+    docDetails,
+    addAppointmentNote
 }
