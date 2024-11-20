@@ -127,6 +127,18 @@ const allDoctors = async (req, res) => {
 
 //API for doctor details
 const docDetails = async (req, res) => {
+    try{
+        const doc = await doctorModel.findById(req.params.id)
+        res.json({ success: true, doc })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+//api for schedule details
+const scheduleDetails = async (req, res) => {
     try {
         const doctorId = req.params.id;
 
@@ -140,6 +152,7 @@ const docDetails = async (req, res) => {
         }
 
         const formattedAppointments = appointments.map(appointment => ({
+            id: appointment._id,
             date: appointment.slotDate,
             time: appointment.slotTime,
             patientName: appointment.userData.name,
@@ -154,6 +167,23 @@ const docDetails = async (req, res) => {
         // console.log(slotDetails)
         // return res.json({ success: true, doctor,slotDetails })
     } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+//api for appointmentDetails
+
+const appointmentDetails = async (req, res) => {
+    try{
+        const { appointmentId } = req.params;
+        const appointment = await appointmentModel.findById(appointmentId);
+
+        if (!appointment) {
+            return res.status(404).json({ error: 'Appointment not found' });
+        }
+
+        res.status(200).json(appointment);
+    } catch (error){
         console.log(error)
         res.json({ success: false, message: error.message })
     }
@@ -212,5 +242,7 @@ export {
     allDoctors,
     adminDashboard,
     docDetails,
-    addAppointmentNote
+    scheduleDetails,
+    addAppointmentNote,
+    appointmentDetails
 }
