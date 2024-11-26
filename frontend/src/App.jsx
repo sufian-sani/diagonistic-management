@@ -14,6 +14,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 import SuccessPage from "./pages/SuccessPage.jsx";
+import CancelPage from "./pages/CancelPage.jsx";
+import FailedPage from "./pages/FailedPage.jsx";
 
 const App = () => {
   return (
@@ -32,6 +34,8 @@ const App = () => {
         <Route path='/my-profile' element={<MyProfile />} />
         <Route path='/verify' element={<Verify />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/cancel" component={ <CancelPage /> } />
+          <Route path="/fail" component={ <FailedPage /> } />
       </Routes>
       <Footer />
     </div>

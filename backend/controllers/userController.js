@@ -379,8 +379,8 @@ const paymentAamarpay = async (req, res) => {
             cus_phone: cusDetails.phone,
             desc: appointmentData.id,
             success_url: `http://localhost:4000/api/user/payment-success/${appointmentId}`,
-            fail_url: "http://localhost:3000/fail.html",
-            cancel_url: "http://localhost:3000/cancel.html",
+            fail_url: "http://localhost:4000/api/user/payment-fail/",
+            cancel_url: "http://localhost:4000/api/user/payment-cancel/",
             type: "json"
         };
 
@@ -406,6 +406,16 @@ const paymentSuccess = async (req, res) => {
     res.redirect(successUrl);
     // res.json({ success: true, redirectTo: successUrl });
 }
+// paymentFail
+const paymentFail = async (req, res) => {
+    const failUrl = 'http://localhost:5173/fail';
+    res.redirect(failUrl);
+}
+// paymentCancel
+const paymentCancel = async (req, res) => {
+    const cancelUrl = 'http://localhost:5173/cancel';
+    res.redirect(cancelUrl);
+}
 
 export {
     loginUser,
@@ -420,5 +430,7 @@ export {
     paymentStripe,
     verifyStripe,
     paymentAamarpay,
-    paymentSuccess
+    paymentSuccess,
+    paymentFail,
+    paymentCancel,
 }

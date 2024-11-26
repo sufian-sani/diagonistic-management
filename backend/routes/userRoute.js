@@ -12,7 +12,7 @@ import {
     paymentStripe,
     verifyStripe,
     paymentAamarpay,
-    paymentSuccess
+    paymentSuccess, paymentFail, paymentCancel
 } from '../controllers/userController.js';
 import upload from '../middleware/multer.js';
 import authUser from '../middleware/authUser.js';
@@ -34,5 +34,7 @@ userRouter.post("/verifyStripe", authUser, verifyStripe)
 //aamarpay
 userRouter.post("/payment-aamarpay", authUser, paymentAamarpay)
 userRouter.post("/payment-success/:appointmentId", paymentSuccess)
+userRouter.post("/payment-fail", paymentFail)
+userRouter.get("/payment-cance", paymentCancel)
 
 export default userRouter;
