@@ -7,6 +7,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import { v2 as cloudinary } from 'cloudinary'
 import stripe from "stripe";
 import razorpay from 'razorpay';
+import axios from 'axios'
 
 // Gateway Initialize
 const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY)
@@ -343,6 +344,65 @@ const verifyStripe = async (req, res) => {
 
 }
 
+//aamarpay setup
+//aamarpay payment
+const aamarpaySandboxUrl = 'https://​sandbox​.aamarpay.com/jsonpost.php';
+const callbackUrl = 'http://localhost:5000/callback';
+
+const paymentAamarpay = async (req, res) => {
+    try {
+        const { appointmentId } = req.body
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if (!appointmentData || appointmentData.cancelled) {
+            return res.json({ success: false, message: 'Appointment Cancelled or not found' })
+        }
+
+        // creating options for razorpay payment
+        // const options = {
+        //     amount: appointmentData.amount,
+        //     receipt: appointmentId,
+        // }
+        // console.log(options)
+        const cusDetails = await userModel.findById(req.body.userId)
+        // console.log(cusDetails)
+
+        const payload = {
+            store_id: 'aamarpaytest',
+            signature_key: 'dbb74894e82415a2f7ff0ec3a97e4183', // Sandbox signature key
+            amount: appointmentData.amount,
+            payment_type: 'VISA',
+            currency: 'BDT',
+            tran_id: `tran_${Date.now()}`,
+            cus_name: cusDetails.name,
+            cus_email: cusDetails.email,
+            cus_phone: cusDetails.phone,
+            desc: appointmentData.id,
+            success_url: "http://localhost:5173/success",
+            fail_url: "http://localhost:3000/fail.html",
+            cancel_url: "http://localhost:3000/cancel.html",
+            type: "json"
+        };
+
+        // creation of an order
+        // const order = await aamarpayInstance.orders.create(options)
+        const responseData = await axios.post(aamarpaySandboxUrl, payload, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+
+        res.json({ success: true, response: responseData.data })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// paymentSuccess
+const paymentSuccess = async (req, res) => {
+    console.log(res)
+}
+
 export {
     loginUser,
     registerUser,
@@ -354,5 +414,7 @@ export {
     paymentRazorpay,
     verifyRazorpay,
     paymentStripe,
-    verifyStripe
+    verifyStripe,
+    paymentAamarpay,
+    paymentSuccess
 }
