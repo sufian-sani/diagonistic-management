@@ -378,7 +378,7 @@ const paymentAamarpay = async (req, res) => {
             cus_email: cusDetails.email,
             cus_phone: cusDetails.phone,
             desc: appointmentData.id,
-            success_url: "http://localhost:5173/success",
+            success_url: `http://localhost:4000/api/user/payment-success/${appointmentId}`,
             fail_url: "http://localhost:3000/fail.html",
             cancel_url: "http://localhost:3000/cancel.html",
             type: "json"
@@ -400,7 +400,11 @@ const paymentAamarpay = async (req, res) => {
 
 // paymentSuccess
 const paymentSuccess = async (req, res) => {
-    console.log(res)
+    const appointmentId = req.params.appointmentId;
+    await appointmentModel.findByIdAndUpdate(appointmentId, { payment: true })
+    const successUrl = 'http://localhost:5173/success';
+    res.redirect(successUrl);
+    // res.json({ success: true, redirectTo: successUrl });
 }
 
 export {

@@ -33,6 +33,6 @@ userRouter.post("/verifyStripe", authUser, verifyStripe)
 
 //aamarpay
 userRouter.post("/payment-aamarpay", authUser, paymentAamarpay)
-userRouter.post("/payment-success/", paymentSuccess)
+userRouter.post("/payment-success/:appointmentId", paymentSuccess)
 
 export default userRouter;
