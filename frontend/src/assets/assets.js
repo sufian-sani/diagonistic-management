@@ -37,6 +37,7 @@ import Gynecologist from './Gynecologist.svg'
 import Neurologist from './Neurologist.svg'
 import Pediatricians from './Pediatricians.svg'
 import aamarpay_logo from './aamarpay_logo.png'
+import d8e70207385a973ad92a55892e082f33 from './d8e70207385a973ad92a55892e082f33.png'
 
 
 export const assets = {
@@ -58,6 +59,7 @@ export const assets = {
     stripe_logo,
     razorpay_logo,
     aamarpay_logo,
+    d8e70207385a973ad92a55892e082f33
 }
 
 export const specialityData = [
