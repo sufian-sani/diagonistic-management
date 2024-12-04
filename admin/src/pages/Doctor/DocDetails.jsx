@@ -13,7 +13,7 @@ const DocProfile = () => {
     const [docInfo, setDocInfo] = useState(null)
     const [appointments, setAppointments] = useState([]);
 
-    const {doctors, aToken} = useContext(AdminContext)
+    // const {doctors, aToken} = useContext(AdminContext)
     const {currency, backendUrl} = useContext(AppContext)
 
 
@@ -51,6 +51,23 @@ const DocProfile = () => {
         fetchAppointments()
     }, [docId])
 
+    const handleDelete = async () => {
+        try {
+            // Call the API to delete the doctor
+            console.log(backendUrl,docId)
+            const response = await axios.delete(backendUrl + `/api/admin/doctor-delete/${docId}`);
+
+            console.log(response);
+
+            if (response.data.success) {
+                alert('Doctor deleted successfully');
+            }
+            navigate('/')
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return (
         <div>
@@ -81,6 +98,13 @@ const DocProfile = () => {
                             Appointment fee: <span className='text-gray-800'>{currency} <input type='number'
                                                                                                value={docInfo.fees}/></span>
                         </p>
+                        <br/>
+                        <button
+                            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                            onClick={handleDelete}
+                        >
+                            Delete Doctor
+                        </button>
                         <br/>
                         <div>
                             <h1>Booked Appointments</h1>

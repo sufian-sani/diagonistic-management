@@ -140,6 +140,17 @@ const docDetails = async (req, res) => {
     }
 }
 
+//delete doctor
+const docDelete = async (req, res) => {
+    try{
+        const doc = await doctorModel.deleteOne({_id: req.params.id})
+        res.json({ success: true, doc })
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
 //api for schedule details
 const scheduleDetails = async (req, res) => {
     try {
@@ -247,5 +258,6 @@ export {
     docDetails,
     scheduleDetails,
     addAppointmentNote,
-    appointmentDetails
+    appointmentDetails,
+    docDelete
 }
