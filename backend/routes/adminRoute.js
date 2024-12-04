@@ -9,7 +9,8 @@ import {
     docDetails,
     addAppointmentNote,
     scheduleDetails,
-    appointmentDetails
+    appointmentDetails,
+    docDelete
 } from '../controllers/adminController.js';
 import { changeAvailablity } from '../controllers/doctorController.js';
 import authAdmin from '../middleware/authAdmin.js';
@@ -26,6 +27,7 @@ adminRouter.get("/dashboard", authAdmin, adminDashboard)
 
 // doctor details api for admin
 adminRouter.get("/doctor-details/:id", docDetails)
+adminRouter.delete("/doctor-delete/:id", docDelete)
 adminRouter.get("/doctor-booked-schedule/:id", scheduleDetails)
 adminRouter.get("/appointment-details/:appointmentId", appointmentDetails)
 adminRouter.patch("/appointments/:appointmentId/note", addAppointmentNote)
